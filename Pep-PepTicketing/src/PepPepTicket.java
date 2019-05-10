@@ -2,7 +2,8 @@
  * Written by Sandy Grayson-s3364895, Kimberley Thomson-s3427286,and
  * Boruch Shmaya Grossbaum-s3549187 for
  * Cinco Ticketing Console-Based Software Project, RMIT CPT330 SEPM SP1 2019
- * File created 19 April 2019 - Version 2.0
+ * File created 19 April 2019
+ * Version 2.0 uploaded 10 May 2019
  *
  * Copyright (C) 2019
  *
@@ -393,7 +394,7 @@ public class PepPepTicket {
 					confirmation = confirmation.toUpperCase();
 					System.out.println();
 					while (!confirmation.contentEquals("Y") && !confirmation.contentEquals("N")) {
-						System.out.println("Invalid response - returning to Main Menu!");
+						System.out.println("Invalid response - returning to Main Menu from A!");
 						// Consume trailing new line
 						//userInput.nextLine();
 						return;
@@ -403,7 +404,7 @@ public class PepPepTicket {
 							System.out.println("Transaction failed!");
 							System.out.println();
 							System.out.print("PepPepTicket " + ticketID + " has not been charged as there is insufficient credit. ");
-							System.out.printf("Ticket balance is currently $%.2f", balance, ".");
+							System.out.printf("Ticket balance is currently $%.2f", balance);
 							System.out.println();
 							System.out.println("Please top up ticket credits and try again.");
 							System.out.println();
@@ -415,7 +416,7 @@ public class PepPepTicket {
 							System.out.println("Thank you, your transaction has been successful!");
 							System.out.println();
 							System.out.printf("Your receipt number is: " + transactionID + ", (" + dateFormat.format(transactionDate));
-							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance, ".");
+							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance);
 							transactionID++;
 							System.out.println();
 							return;
@@ -441,7 +442,7 @@ public class PepPepTicket {
 					confirmation = confirmation.toUpperCase();
 					System.out.println();
 					while (!confirmation.contentEquals("Y") && !confirmation.contentEquals("N")) {
-						System.out.println("Invalid response - returning to Main Menu!");
+						System.out.println("Invalid response - returning to Main Menu from B!");
 						return;
 					}
 					if (confirmation.contentEquals("Y")) {
@@ -449,7 +450,7 @@ public class PepPepTicket {
 							System.out.println("Transaction failed!");
 							System.out.println();
 							System.out.print("PepPepTicket " + ticketID + " has not been charged as there is insufficient credit. ");
-							System.out.printf("Ticket balance is currently $%.2f", balance, ".");
+							System.out.printf("Ticket balance is currently $%.2f", balance);
 							System.out.println();
 							System.out.println("Please top up ticket credits and try again.");
 							System.out.println();
@@ -461,7 +462,7 @@ public class PepPepTicket {
 							System.out.println("Thank you, your transaction has been successful!");
 							System.out.println();
 							System.out.printf("Your receipt number is: " + transactionID + ", (" + dateFormat.format(transactionDate));
-							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance, ".");
+							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance);
 							transactionID++;
 							System.out.println();
 							return;
@@ -487,7 +488,7 @@ public class PepPepTicket {
 					confirmation = confirmation.toUpperCase();
 					System.out.println();
 					while (!confirmation.contentEquals("Y") && !confirmation.contentEquals("N")) {
-						System.out.println("Invalid response - returning to Main Menu!");
+						System.out.println("Invalid response - returning to Main Menu from C!");
 						return;
 					}
 					if (confirmation.contentEquals("Y")) {
@@ -495,7 +496,7 @@ public class PepPepTicket {
 							System.out.println("Transaction failed!");
 							System.out.println();
 							System.out.print("PepPepTicket " + ticketID + " has not been charged as there is insufficient credit. ");
-							System.out.printf("Ticket balance is currently $%.2f", balance, ".");
+							System.out.printf("Ticket balance is currently $%.2f", balance);
 							System.out.println();
 							System.out.println("Please top up ticket credits and try again.");
 							System.out.println();
@@ -507,7 +508,7 @@ public class PepPepTicket {
 							System.out.println("Thank you, your transaction has been successful!");
 							System.out.println();
 							System.out.printf("Your receipt number is: " + transactionID + ", (" + dateFormat.format(transactionDate));
-							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance, ".");
+							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance);
 							transactionID++;
 							System.out.println();
 							return;
@@ -533,7 +534,7 @@ public class PepPepTicket {
 					confirmation = confirmation.toUpperCase();
 					System.out.println();
 					while (!confirmation.contentEquals("Y") && !confirmation.contentEquals("N")) {
-						System.out.println("Invalid response - returning to Main Menu!");
+						System.out.println("Invalid response - returning to Main Menu from D!");
 						return;
 					}
 					if (confirmation.contentEquals("Y")) {
@@ -541,7 +542,7 @@ public class PepPepTicket {
 							System.out.println("Transaction failed!");
 							System.out.println();
 							System.out.print("PepPepTicket " + ticketID + " has not been charged as there is insufficient credit. ");
-							System.out.printf("Ticket balance is currently $%.2f", balance, ".");
+							System.out.printf("Ticket balance is currently $%.2f", balance);
 							System.out.println();
 							System.out.println("Please top up ticket credits and try again.");
 							System.out.println();
@@ -553,7 +554,7 @@ public class PepPepTicket {
 							System.out.println("Thank you, your transaction has been successful!");
 							System.out.println();
 							System.out.printf("Your receipt number is: " + transactionID + ", (" + dateFormat.format(transactionDate));
-							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance, ".");
+							System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance);
 							transactionID++;
 							System.out.println();
 							return;
@@ -629,7 +630,7 @@ public class PepPepTicket {
 				System.out.printf("The current credit balance on Ticket: " + ticketID + " is: $%.2f", balance);
 			}
 		}
-		catch(InputMismatchException exception) {
+		catch (InputMismatchException exception) {
 			System.out.print("That is not an integer!");
 			// Consume trailing new line
 			userInput.nextLine();

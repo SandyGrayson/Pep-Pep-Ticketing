@@ -33,17 +33,19 @@ public class PepPepTicket {
 	// Static variables have the same value for every object
 	// Protected means that this value can only be accessed by other code
 	static Scanner userInput = new Scanner(System.in);
-	// Create Pep-Pep Ticket multi-dimensional ArrayList
-	private static ArrayList<PepPepTicket> ticketList = new ArrayList<PepPepTicket>();
-	private static int ticketCount = 0;
+	// Create Pep-Pep Ticket ArrayList of arrays
+	private static ArrayList<PepPepTicket[][]> ticketList = new ArrayList<PepPepTicket[][]>();
+	// Declare object count
+	private static int ticketCount = 0;	
 	private static long ticketID;
 	private static int targetID;
 	private static double ticketCost = 8;
 	private static double balance = 0;
 	private static double credit;
-	private static long transactionID = 1000;
+	private static int transactionID = 1000;
 	protected static int numberOfTickets = 0;
 	protected static int numberOfTransacations = 0;
+	private static int transactionCount = 0;
 	private static String pass1 = "2 Hour Zone 1 Pass";
 	private static String pass2 = "2 Hour Zones 1 & 2 Pass";
 	private static String pass3 = "All Day Zone 1 Pass";
@@ -52,17 +54,27 @@ public class PepPepTicket {
 	private static double pass2Cost = 6.00;
 	private static double pass3Cost = 7.00;
 	private static double pass4Cost = 12.00;
+	static String pass = pass1;
+	static double charge = pass1Cost;
 	static Date transactionDate = new Date();
 	static SimpleDateFormat dateFormat = new SimpleDateFormat ("hh:mm:ss a z, E dd.MM.yyyy");
-	int i = 0;
+	static int i = 0;
 	int j = 0;
 	
-	public static ArrayList<PepPepTicket> getTicketList(long ticketID, double balance) {
+	public static ArrayList<PepPepTicket[][]> getTicketList(long ticketID, double balance, int transactionID, 
+			Date transactionDate, String pass, double passCost, double charge) {
+		PepPepTicket.ticketID = ticketID;
+	    PepPepTicket.balance = balance;
+	    PepPepTicket.transactionID = transactionID;
+	    PepPepTicket.transactionDate = transactionDate;
+	    PepPepTicket.pass = pass;
+	    PepPepTicket.charge = charge;
 		return ticketList;
 	}
 
+
 	// Constructor
-	public PepPepTicket(long ticketID, double balance) {
+	public PepPepTicket(int ticketCount, long ticketID, double balance) {
 		PepPepTicket.ticketID = ticketID;
 	    PepPepTicket.balance = balance;
 	}
@@ -102,7 +114,7 @@ public class PepPepTicket {
 	}
 	
 	// Method overloading allows different input to be accepted into the same method name
-	public void setTransactionID(long transactionID) {
+	public void setTransactionID(int transactionID) {
 		PepPepTicket.transactionID = transactionID;
 	}
 	
@@ -131,6 +143,16 @@ public class PepPepTicket {
 		return pass4Cost;
 	}
 	
+	public static int getTransactionCount() {
+		return transactionCount;
+	}
+
+
+	public static void setTransactionCount(int transactionCount) {
+		PepPepTicket.transactionCount = transactionCount;
+	}
+
+
 	public static Date getTransactionDate() {
 		return transactionDate;
 	}
@@ -138,6 +160,7 @@ public class PepPepTicket {
 	public static void setTransactionDate(Date transactionDate) {
 		PepPepTicket.transactionDate = transactionDate;
 	}
+	
 	
 	private static void purchaseTicket() {
 		System.out.println();
@@ -180,10 +203,10 @@ public class PepPepTicket {
 					System.out.println();
 				
 					// Create new Pep-Pep Ticket and store it in array
-					//PepPepTicket  = new PepPepTicket(ticketID, balance);
+					//ticketList.add(new PepPepTicket(ticketID, balance));
 					//ticketCount++;
 					// This for loop is for testing the array list
-					for (int i = 0; i <= ticketList.size();) {
+					for (ticketCount = 0; ticketCount <= ticketList.size(); ticketCount++) {
 						System.out.println("(Ticket " + ticketID + " is stored at array position: "+ PepPepTicket.ticketCount + ")");
 						System.out.println();
 						ticketCount++;
@@ -193,6 +216,7 @@ public class PepPepTicket {
 			}
 			catch (InputMismatchException exception) {
 				System.out.println("That is not an integer!");
+				return;
 			}
 			// Clears any trailing lines, so doesn't interfere with next entry;
 			userInput.nextLine();
@@ -223,7 +247,7 @@ public class PepPepTicket {
 		optionSelection = optionSelection.toUpperCase();
 		
 		// Set temporary reference to null (acts as a "not found" signal)
-		PepPepTicket temp = null;
+		PepPepTicket[][] temp = null;
 		
 		while (!optionSelection.contentEquals("Y") && !optionSelection.contentEquals("N")) {
 			System.out.println();
@@ -269,12 +293,15 @@ public class PepPepTicket {
 					// Credit specified amount to the matching ticket
 					while ((credit % 5 != 0) || ((credit + balance) > 100)) {
 						if (credit % 5 !=0) {
+							System.out.println();
 							System.out.println("Credit amount must be a multiple of $5.");
 							System.out.print("Please re-enter the amount: ");
 							credit = userInput.nextDouble();
 						}
 						else if (credit + balance > 100) {
+							System.out.println();
 							System.out.printf("The current credit balance on your ticket is: $%.2f", balance);
+							System.out.println();
 							System.out.print("Total allowable credit is $100. Please enter a lesser amount: ");
 							credit = userInput.nextDouble();
 						}
@@ -285,14 +312,17 @@ public class PepPepTicket {
 				if ((credit % 5 == 0) && ((credit + balance) <= 100) && (ticketID == targetID)) {
 					// Increase credit is valid so add it to the ticket balance
 					PepPepTicket.balance = PepPepTicket.balance + credit;
+					System.out.println();
 					System.out.printf("Transaction successful! Your new credit balance is: $%.2f", getBalance());
+					System.out.println();
 					return;
 				}
 			}			
 			catch (InputMismatchException exception) {
-				System.out.println("That is not a valid input!"); 
+				System.out.println("That is not a valid input! The addCredits exception caught it."); 
 				// Consume trailing new line
 				userInput.nextLine();
+				//return;
 			}
 		}		
 		
@@ -310,7 +340,7 @@ public class PepPepTicket {
 		System.out.println();
 		
 		// Set temporary reference to null (acts as a "not found" signal)
-		PepPepTicket temp = null;
+		PepPepTicket[][] temp = null;
 				
 		System.out.print("Please enter your ticket ID: ");
 		try {
@@ -369,7 +399,7 @@ public class PepPepTicket {
 		System.out.print("Enter your selection: ");
 		passSelection = userInput.nextLine();
 		passSelection = passSelection.toUpperCase();
-		System.out.println();
+		System.out.println("");
 		
 		// Validate passSelection input length
 		if (passSelection.length() != 1) {
@@ -377,13 +407,14 @@ public class PepPepTicket {
 			return;
 		}
 		
-		else {				
+		else {		
 			// Process user's selection
 			switch (passSelection) {
 			case "A":
 				searchID();
+				System.out.println();
 				if (ticketID !=targetID) {
-					System.out.println();
+					System.out.println("I'm being booted out of case A!!!");
 					return;
 				}
 				else {
@@ -395,8 +426,6 @@ public class PepPepTicket {
 					System.out.println();
 					while (!confirmation.contentEquals("Y") && !confirmation.contentEquals("N")) {
 						System.out.println("Invalid response - returning to Main Menu from A!");
-						// Consume trailing new line
-						//userInput.nextLine();
 						return;
 					}
 					if (confirmation.contentEquals("Y")) {
@@ -428,6 +457,7 @@ public class PepPepTicket {
 					}
 				}
 				break;
+				
 			case "B":
 				searchID();
 				if (ticketID !=targetID) {
@@ -474,6 +504,7 @@ public class PepPepTicket {
 					}
 				}
 				break;
+				
 			case "C":
 				searchID();
 				if (ticketID !=targetID) {
@@ -520,6 +551,7 @@ public class PepPepTicket {
 					}
 				}
 				break;
+				
 			case "D":
 				searchID();
 				if (ticketID !=targetID) {
@@ -566,9 +598,11 @@ public class PepPepTicket {
 					}
 				}
 				break;
+				
 			case "X":
 				System.out.println("Returning to Main Menu ... ");
 				break;
+				
 			default:
 				System.out.println("Selection error - that is not a valid travel pass selection!");
 				return;
@@ -588,19 +622,57 @@ public class PepPepTicket {
 
 		PepPepTicket.printArrayList(ticketList);
 		System.out.println("\n");
+		
+		printDetails();
 		return;
 	}
 	
+	private static void printDetails() {
+		System.out.println("Size of ticket list is: " + ticketList.size());
+		System.out.println("\n");
+		
+		// For loop
+		for (ticketCount = 0; ticketCount < ticketList.size(); ticketCount++) {
+			System.out.printf("%20s%s\n", "Index:  ", ticketCount);
+			System.out.printf("%20s%s\n", "Ticket ID:  ", ticketID);
+			System.out.printf("%20s%s %.2f\n", "Balance:  ", "$", balance);
+			System.out.printf("%20s%s\n", "Transaction ID:  ", transactionID);
+			System.out.printf("%20s%s\n", "Date:  ", transactionDate);
+			System.out.printf("%20s%s\n", "Pass:  ", pass);
+			System.out.printf("%20s%s %.2f\n", "Cost:  ", "$", charge);
+			System.out.println();
+		}
+	}
 	
-	public static void printArrayList(ArrayList<PepPepTicket> ticketList) {
-		System.out.printf("List position " + ticketCount +") is " + "Ticket ID: " + ticketID + 
+	public static void printArrayList(ArrayList<PepPepTicket[][]> ticketList) {
+		for (int i = 0; i < ticketList.size(); i++) {
+			System.out.printf("List position " + ticketCount +") is " + "Ticket ID: " + ticketID + 
 				" that has a balance of " + "$%.2f", balance);
+			ticketCount++;
+			System.out.println();
+		}
+		
+		System.out.println();
+		System.out.println("ArrayList contains " + ticketList.size() + " arrays.");
+		System.out.println();
+			
+		// Iterate through ArrayList of arrays
+		for (PepPepTicket[][] ticketArray : ticketList) {
+			System.out.print("Array size is: " + ticketArray.length);
+			System.out.print(" [");
+				
+			// Iterate through array using its length
+			for (int i = 0; i < ticketArray.length; i++) {
+				System.out.println( ticketArray[i] + " " + ticketID + " " + balance);					
+			}
+			System.out.println("]");
+		}
 	}
 	
 	public static void searchID() {
 		
 		// Set temporary reference to null (acts as a "not found" signal)
-		PepPepTicket temp = null;
+		PepPepTicket[][] temp = null;
 						
 		System.out.print("Please enter your ticket ID: ");
 		try {
@@ -619,38 +691,38 @@ public class PepPepTicket {
 						
 			// Check to see if search was unsuccessful
 			if (temp == null) {
-				System.out.print("Pep-Pep Ticket ID \"" + targetID + "\" not found!");
+				System.out.print("Pep-Pep Ticket ID \"" + targetID + "\" not found! (Message from searchID)");
 				// Consume trailing new line
 				userInput.nextLine();
 				return;
 			}
 			else {
-				System.out.println();
-				// Matching PepPepTicket object found, so let the user know how much credit is on the ticket
-				System.out.printf("The current credit balance on Ticket: " + ticketID + " is: $%.2f", balance);
+				for (int i = 0; i < ticketCount; i++) {
+					System.out.println();
+					// Matching PepPepTicket object found, so let the user know how much credit is on the ticket
+					System.out.printf("The current credit balance on Ticket: " + ticketID + " is: $%.2f", balance);
+				}
 			}
 		}
 		catch (InputMismatchException exception) {
-			System.out.print("That is not an integer!");
+			System.out.print("That is not an integer! The searchID exception is catching it.");
 			// Consume trailing new line
 			userInput.nextLine();
 			return;
 		}
-//		System.out.println();
-		// Consume trailing new line
+//		// Consume trailing new line
 		userInput.nextLine();
+		return;
 	}	
 
 
 	public static void main(String[] args) {
 		
 		userInput = new Scanner(System.in);
+		
 		// Hard coded array items to help with testing features in the program
-		ticketList.add(new PepPepTicket(225225, 23.00));
-//		ticketList.add(new PepPepTicket(100001, 20.50));
-//		ticketList.add(new PepPepTicket(565656, 3.50));
-//		ticketList.add(new PepPepTicket(111111, 2.00));
-//		ticketList.add(new PepPepTicket(948371, 1.50));			
+		ticketList.add(new PepPepTicket[][]{});
+		ticketList.add(new PepPepTicket[][]{});		
 		
 		// Declare variables
 		String menuSelection;

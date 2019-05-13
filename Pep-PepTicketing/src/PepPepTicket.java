@@ -143,25 +143,27 @@ public class PepPepTicket {
 		return pass4Cost;
 	}
 	
+	// Getter for transaction count
 	public static int getTransactionCount() {
 		return transactionCount;
 	}
 
-
+	// Setter for transaction count
 	public static void setTransactionCount(int transactionCount) {
 		PepPepTicket.transactionCount = transactionCount;
 	}
 
-
+	// Getter for transaction date
 	public static Date getTransactionDate() {
 		return transactionDate;
 	}
 
+	// Setter for transaction date
 	public static void setTransactionDate(Date transactionDate) {
 		PepPepTicket.transactionDate = transactionDate;
 	}
 	
-	
+	// Method for purchasing a Pep-Pep Ticket
 	private static void purchaseTicket() {
 		System.out.println();
 		System.out.println("PEP-PEP TICKET INFORMATION:");
@@ -229,6 +231,7 @@ public class PepPepTicket {
 	}
 	
 
+	// Method for adding credit to the Pep-Pep Ticket
 	private static void addCredits() {
 		System.out.println();
 		System.out.println("ADD CREDITS INFORMATION:");
@@ -322,7 +325,6 @@ public class PepPepTicket {
 				System.out.println("That is not a valid input! The addCredits exception caught it."); 
 				// Consume trailing new line
 				userInput.nextLine();
-				//return;
 			}
 		}		
 		
@@ -333,6 +335,7 @@ public class PepPepTicket {
 	}
 
 
+	// Method for checking the balance of credit on the Pep-Pep Ticket
 	private static void checkBalance() {
 		System.out.println();
 		System.out.println("CHECK CREDIT BALANCE:");
@@ -378,6 +381,7 @@ public class PepPepTicket {
 	}
 		
 
+	// Method for buying travel passes with the Pep-Pep Ticket
 	private static void buyPass() {
 		String passSelection;
 		String confirmation;
@@ -399,7 +403,7 @@ public class PepPepTicket {
 		System.out.print("Enter your selection: ");
 		passSelection = userInput.nextLine();
 		passSelection = passSelection.toUpperCase();
-		System.out.println("");
+		System.out.println();
 		
 		// Validate passSelection input length
 		if (passSelection.length() != 1) {
@@ -612,38 +616,138 @@ public class PepPepTicket {
 	}
 	
 
+	// Method for Administrator's to view the transactions on a Pep-Pep Ticket
 	private static void viewTransactions() {
-		System.out.println();
-		System.out.println("VIEW TRANSACTIONS:");
-		System.out.println("-----------------");
-		System.out.println();
-		System.out.print("Current ticket list:");
-		System.out.println();
+		String outputSelection;
+		do {
+			System.out.println();
+			System.out.println("VIEW TICKET TRANSACTIONS:");
+			System.out.println("-------------------------------------------------");
+			System.out.println();
+			System.out.println("D - Output transactions sorted by date");
+			System.out.println("T - Output transactions sorted by transaction ID");
+			System.out.println("X - Cancel and return to Main Menu");
+			System.out.println();
+			System.out.println("-------------------------------------------------");
+			System.out.println();
+			System.out.print("Enter your selection: ");
+			outputSelection = userInput.nextLine();
+			outputSelection = outputSelection.toUpperCase();
+			System.out.println();
 
-		PepPepTicket.printArrayList(ticketList);
-		System.out.println("\n");
+			// Validate outputSelection input length
+			if (outputSelection.length() != 1) {
+				System.out.println("Invalid entry - selection must be a single character");
+				return;
+			}
 		
-		printDetails();
+			else {
+				// Process user's selection
+				switch (outputSelection) {
+				case "D": 
+					searchID();
+					if (ticketID !=targetID) {
+						return;
+					}
+					else {
+						System.out.println();
+						System.out.println("Transactions on this ticket sorted by DATE OF TRANSACTION are:");
+						System.out.println();
+						
+						// For loop
+						for (ticketCount = 0; ticketCount < ticketList.size(); ticketCount++) {
+							System.out.printf("%20s%s\n", "Transaction ID:  ", transactionID);
+							System.out.printf("%20s%s\n", "Date:  ", transactionDate);
+							System.out.printf("%20s%s\n", "Pass:  ", pass);
+							System.out.printf("%20s%s %.2f\n", "Cost:  ", "$", charge);
+							System.out.printf("%20s%s\n", "Index:  ", ticketCount);
+							System.out.println();
+						}
+						System.out.println();
+						System.out.println("End of transactions for Ticket ID: " + ticketID + ".   Exiting to viewing menu . . .");
+					}				
+					break;
+				
+				case "T":
+					searchID();
+					if (ticketID != targetID) {
+						return;
+					}
+					else {
+						System.out.println();
+						System.out.println("Transactions on this ticket sorted by TRANSACTION ID are:");
+						System.out.println();
+						
+						// For loop
+						for (ticketCount = 0; ticketCount < ticketList.size(); ticketCount++) {
+							System.out.printf("%20s%s\n", "Date:  ", transactionDate);
+							System.out.printf("%20s%s\n", "Transaction ID:  ", transactionID);
+							System.out.printf("%20s%s\n", "Pass:  ", pass);
+							System.out.printf("%20s%s %.2f\n", "Cost:  ", "$", charge);
+							System.out.printf("%20s%s\n", "Index:  ", ticketCount);
+							System.out.println();
+						}
+						System.out.println();
+						System.out.println("End of transactions for Ticket ID: " + ticketID + ".   Exiting to viewing menu . . .");
+					}
+				break;
+			
+				case "X":
+					System.out.println("Returning to Main Menu ... ");
+					break;
+				default:
+					System.out.println("Selection error - that is not a valid selection to view transactions!");
+					//return;
+				}
+			}
+		}
+		while (!outputSelection.equals("X"));	
 		return;
 	}
 	
-	private static void printDetails() {
-		System.out.println("Size of ticket list is: " + ticketList.size());
-		System.out.println("\n");
+	
+	// Method to print transactions by DATE - not utilized at present
+	private static void printDetailsByDate() {
+		System.out.println();
+		System.out.println("Transactions on this ticket sorted by DATE OF TRANSACTION are:");
+		System.out.println();
 		
 		// For loop
 		for (ticketCount = 0; ticketCount < ticketList.size(); ticketCount++) {
-			System.out.printf("%20s%s\n", "Index:  ", ticketCount);
-			System.out.printf("%20s%s\n", "Ticket ID:  ", ticketID);
-			System.out.printf("%20s%s %.2f\n", "Balance:  ", "$", balance);
 			System.out.printf("%20s%s\n", "Transaction ID:  ", transactionID);
 			System.out.printf("%20s%s\n", "Date:  ", transactionDate);
 			System.out.printf("%20s%s\n", "Pass:  ", pass);
 			System.out.printf("%20s%s %.2f\n", "Cost:  ", "$", charge);
+			System.out.printf("%20s%s\n", "Index:  ", ticketCount);
 			System.out.println();
 		}
+		// Consume trailing new line
+		userInput.nextLine();
+		return;
 	}
 	
+	
+	// Method to print transactions by ID - not utilized at present
+	private static void printDetailsByTransactionID() {
+		System.out.println();
+		System.out.println("Transactions on this ticket sorted by TRANSACTION ID are:");
+		System.out.println();
+		
+		// For loop
+		for (ticketCount = 0; ticketCount < ticketList.size(); ticketCount++) {
+			System.out.printf("%20s%s\n", "Date:  ", transactionDate);
+			System.out.printf("%20s%s\n", "Transaction ID:  ", transactionID);
+			System.out.printf("%20s%s\n", "Pass:  ", pass);
+			System.out.printf("%20s%s %.2f\n", "Cost:  ", "$", charge);
+			System.out.printf("%20s%s\n", "Index:  ", ticketCount);
+			System.out.println();
+		}
+		// Consume trailing new line
+		userInput.nextLine();
+		return;
+	}
+	
+	// Method to trial print array details - not utilized at present
 	public static void printArrayList(ArrayList<PepPepTicket[][]> ticketList) {
 		for (int i = 0; i < ticketList.size(); i++) {
 			System.out.printf("List position " + ticketCount +") is " + "Ticket ID: " + ticketID + 
@@ -666,9 +770,15 @@ public class PepPepTicket {
 				System.out.println( ticketArray[i] + " " + ticketID + " " + balance);					
 			}
 			System.out.println("]");
+			return;
 		}
+		// Consume trailing new line
+		userInput.nextLine();
+		return;
 	}
 	
+	
+	// Method to search the user entered ID
 	public static void searchID() {
 		
 		// Set temporary reference to null (acts as a "not found" signal)
@@ -691,24 +801,28 @@ public class PepPepTicket {
 						
 			// Check to see if search was unsuccessful
 			if (temp == null) {
-				System.out.print("Pep-Pep Ticket ID \"" + targetID + "\" not found! (Message from searchID)");
+				System.out.print("Pep-Pep Ticket ID " + targetID + " not found! (Message from searchID)");
+				System.out.println();
 				// Consume trailing new line
 				userInput.nextLine();
 				return;
 			}
 			else {
+				System.out.println();
 				for (int i = 0; i < ticketCount; i++) {
-					System.out.println();
 					// Matching PepPepTicket object found, so let the user know how much credit is on the ticket
 					System.out.printf("The current credit balance on Ticket: " + ticketID + " is: $%.2f", balance);
+					// Consume trailing new line
+					userInput.nextLine();
+					return;
 				}
 			}
 		}
 		catch (InputMismatchException exception) {
 			System.out.print("That is not an integer! The searchID exception is catching it.");
 			// Consume trailing new line
-			userInput.nextLine();
-			return;
+			//userInput.nextLine();
+			//return;
 		}
 //		// Consume trailing new line
 		userInput.nextLine();
@@ -716,6 +830,7 @@ public class PepPepTicket {
 	}	
 
 
+	// Main method to run the Main Menu and program
 	public static void main(String[] args) {
 		
 		userInput = new Scanner(System.in);

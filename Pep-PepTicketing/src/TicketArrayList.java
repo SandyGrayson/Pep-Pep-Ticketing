@@ -5,6 +5,7 @@
  * File created 19 April 2019
  * Version 2.0 uploaded 10 May 2019
  * Version 3.0 uploaded 17 May 2019
+ * Version 3.1 uploaded 18 May 2019
  *
  * Copyright (C) 2019
  *
@@ -24,9 +25,7 @@
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 
@@ -72,9 +71,14 @@ public class TicketArrayList {
 			this.ticketID = ticketID;
 			this.balance = balance;
 		}
+
+		public long getTicketID() {
+			// TODO Auto-generated method stub
+			return ticketID;
+		}
 	}
 	
-	// Accessor/Getter for ticket ID
+	// Getter for ticket ID
 	public long getTicketID() {
 			return ticketID;
 		}
@@ -92,7 +96,7 @@ public class TicketArrayList {
 		return ticketID;
 	}
 		
-	// Accessor/Getter for balance
+	// Getter for balance
 	public double getBalance() {
 		return balance;
 	}
@@ -123,7 +127,7 @@ public class TicketArrayList {
 		}		
 	}
 	
-	// Accessor/Getter for transaction ID
+	// Getter for transaction ID
 	public long getTransactionID() {
 		return transactionID;
 	}
@@ -133,17 +137,17 @@ public class TicketArrayList {
 		this.transactionID = transactionID;
 	}
 	
-	// Accessor/Getter for credit
+	// Getter for credit
 	public double getCredit(){
 		return credit;
 	}
 		
-	// Accessor/Getter for pass type
+	// Getter for pass type
 	public String getPass() {
 		return pass;
 	}
 	
-	// Accessor/Getter for charge
+	// Getter for charge
 		public double getCharge() {
 			return charge;
 	}
@@ -158,17 +162,6 @@ public class TicketArrayList {
 		this.transactionDate = transactionDate;
 	}
 	
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	// Method for adding tickets into the ticketList array list
-	private void addTickets(long ticketID[], double balance[]) {
-		// Local ticket array list taking data type from the class
-		ArrayList<Ticket> ticketList = new ArrayList<>();
-		for (int i = 0; i < ticketCount; i++) {
-			// Create an object and send values to the constructor to be save in the ticket class
-			ticketList.add(new Ticket(ticketID[i], balance[i]));
-		}
-	}
 	
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 		
@@ -257,7 +250,7 @@ public class TicketArrayList {
 			targetID = userInput.nextInt();
 					
 			// Uses array length to control the search loop to find a match
-			for (int i = 0; i < ticketCount && temp == null; i++) {
+			for (int i = 0; i < ticketList.size() && temp == null; i++) {
 						
 				// Check the current ticket to see if it has the ID specified by the user
 				if (ticketID  == targetID) {
@@ -277,7 +270,7 @@ public class TicketArrayList {
 			}
 			else {
 				System.out.println();
-				for (int i = 0; i < ticketCount; i++) {
+				for (int i = 0; i < ticketList.size(); i++) {
 					// Matching PepPepTicket object found, so let the user know how much credit is on the ticket
 					System.out.printf("The current credit balance on Ticket: " + ticketID + " is: $%.2f", balance);
 					System.out.println();
@@ -294,9 +287,9 @@ public class TicketArrayList {
 		// Consume trailing new line
 		userInput.nextLine();
 		return;
-	}	
+	}
 	
-//-------------------------------------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	// Method for adding credits to the ticket
 	private void addCredits() {
@@ -317,7 +310,7 @@ public class TicketArrayList {
 		optionSelection = optionSelection.toUpperCase();
 		
 		// Set temporary reference to null (acts as a "not found" signal)
-		Ticket temp = null;
+		//Ticket temp = null;
 		
 		while (!optionSelection.contentEquals("Y") && !optionSelection.contentEquals("N")) {
 			System.out.println();
@@ -326,33 +319,14 @@ public class TicketArrayList {
 		}
 		
 		if (optionSelection.contentEquals("Y")) {
+			searchID();
 			try {
 				System.out.println();
-				// Prompt user to enter target Pep-Pep Ticket ID to search for
-				System.out.print("Please enter your ticket ID: ");
-				targetID = userInput.nextInt();			
-			
-				// Uses array length to control the search loop to find a match
-				for (int i = 0; i < ticketCount && temp == null; i++) {
-				
-					// Check the current ticket to see if it has the ID specified by the user
-					if (ticketID == targetID) {
-						// Attach temp reference to matching PepPepTicket object
-						temp = ticketList.get(i);
-					}
-				}
-			
-				// Check to see if search was unsuccessful
-				if (temp == null) {
-					System.out.println("Pep-Pep Ticket ID \"" + targetID + "\" not found!");
-					// Consume trailing new line
-					userInput.nextLine();
+				if (ticketID !=targetID) {
+					System.out.println();
+					return;
 				}
 				else {
-					// Matching PepPepTicket object found, so prompt the user to enter the credit amount
-					System.out.println();
-					System.out.print("Matching ticket ID found! ");
-					System.out.printf("The current credit balance on your ticket is: $%.2f", balance, ".");
 					System.out.println();
 					System.out.print("Enter an amount to credit: $");
 					credit = userInput.nextDouble();
@@ -363,27 +337,32 @@ public class TicketArrayList {
 					// Credit specified amount to the matching ticket
 					while ((credit % 5 != 0) || ((credit + balance) > 100)) {
 						if (credit % 5 !=0) {
+							System.out.println();
 							System.out.println("Credit amount must be a multiple of $5.");
 							System.out.print("Please re-enter the amount: ");
 							credit = userInput.nextDouble();
 						}
 						else if (credit + balance > 100) {
+							System.out.println();
 							System.out.printf("The current credit balance on your ticket is: $%.2f", balance);
+							System.out.println();
 							System.out.print("Total allowable credit is $100. Please enter a lesser amount: ");
 							credit = userInput.nextDouble();
 						}
 						// Consume trailing new line
 						userInput.nextLine();
 					}
+				
+					if ((credit % 5 == 0) && ((credit + balance) <= 100) && (ticketID == targetID)) {
+						// Increase credit is valid so add it to the ticket balance
+						balance = balance + credit;
+						System.out.println();
+						System.out.printf("Transaction successful! Your new credit balance is: $%.2f", balance);
+						System.out.println();
+						return;
+					}			
 				}
-				if ((credit % 5 == 0) && ((credit + balance) <= 100) && (ticketID == targetID)) {
-					// Increase credit is valid so add it to the ticket balance
-					balance = balance + credit;
-					System.out.printf("Transaction successful! Your new credit balance is: $%.2f", getBalance());
-					System.out.println();
-					return;
-				}
-			}			
+			}
 			catch (InputMismatchException exception) {
 				System.out.println("That is not a valid input!"); 
 				// Consume trailing new line
@@ -451,9 +430,13 @@ public class TicketArrayList {
 					pass = pass1;
 					charge = pass1Cost;
 					System.out.println();
-					System.out.printf("You are purchasing a " + pass + ", $%.2f", charge);
-					System.out.print(" will be charged to Pep-Pep Ticket " + ticketID + ". Confirm - Y / N: ");
-					buyPass();
+					if (ticketID !=targetID) {
+						System.out.println();
+						return;
+					}
+					else {
+						buyPass();
+					}
 					break;
 				
 				case "B":
@@ -461,9 +444,13 @@ public class TicketArrayList {
 					pass = pass2;
 					charge = pass2Cost;
 					System.out.println();
-					System.out.printf("You are purchasing a " + pass + ", $%.2f", charge);
-					System.out.print(" will be charged to Pep-Pep Ticket " + ticketID + ". Confirm - Y / N: ");
-					buyPass();
+					if (ticketID !=targetID) {
+						System.out.println();
+						return;
+					}
+					else {
+						buyPass();
+					}
 					break;
 				
 				case "C":
@@ -471,9 +458,13 @@ public class TicketArrayList {
 					pass = pass3;
 					charge = pass3Cost;
 					System.out.println();
-					System.out.printf("You are purchasing a " + pass + ", $%.2f", charge);
-					System.out.print(" will be charged to Pep-Pep Ticket " + ticketID + ". Confirm - Y / N: ");
-					buyPass();
+					if (ticketID !=targetID) {
+						System.out.println();
+						return;
+					}
+					else {
+						buyPass();
+					}
 					break;
 				
 				case "D":
@@ -481,9 +472,13 @@ public class TicketArrayList {
 					pass = pass4;
 					charge = pass4Cost;
 					System.out.println();
-					System.out.printf("You are purchasing a " + pass + ", $%.2f", charge);
-					System.out.print(" will be charged to Pep-Pep Ticket " + ticketID + ". Confirm - Y / N: ");
-					buyPass();
+					if (ticketID !=targetID) {
+						System.out.println();
+						return;
+					}
+					else {
+						buyPass();
+					}
 					break;
 				
 				case "X":
@@ -504,50 +499,46 @@ public class TicketArrayList {
 	// Method to process the selected travel pass being bought on the ticket
 	private void buyPass() {
 		String confirmation;
+		System.out.printf("You are purchasing a " + pass + ", $%.2f", charge);
+		System.out.print(" will be charged to Pep-Pep Ticket " + ticketID + ". Confirm - Y / N: ");
 		
-		if (ticketID !=targetID) {
-			System.out.println();
+		confirmation = userInput.nextLine();
+		confirmation = confirmation.toUpperCase();
+		
+		while (!confirmation.contentEquals("Y") && !confirmation.contentEquals("N")) {
+			System.out.println("Invalid response - returning to pass selection menu!");
 			return;
 		}
-		else {
-			
-			confirmation = userInput.nextLine();
-			confirmation = confirmation.toUpperCase();
-			System.out.println();
-			while (!confirmation.contentEquals("Y") && !confirmation.contentEquals("N")) {
-				System.out.println("Invalid response - returning to Main Menu!");
+		if (confirmation.contentEquals("Y")) {
+			if (balance < charge) {
+				System.out.println("Transaction failed!");
+				System.out.println();
+				System.out.print("PepPepTicket " + ticketID + " has not been charged as there is insufficient credit. ");
+				System.out.printf("Ticket balance is currently $%.2f", balance, ".");
+				System.out.println();
+				System.out.println("Please top up ticket credits and try again.");
+				System.out.println();
+				System.out.println("Returning to pass selection options . . .");
 				return;
 			}
-			if (confirmation.contentEquals("Y")) {
-				if (balance < charge) {
-					System.out.println("Transaction failed!");
-					System.out.println();
-					System.out.print("PepPepTicket " + ticketID + " has not been charged as there is insufficient credit. ");
-					System.out.printf("Ticket balance is currently $%.2f", balance, ".");
-					System.out.println();
-					System.out.println("Please top up ticket credits and try again.");
-					System.out.println();
-					System.out.println("Returning to pass selection options . . .");
-					return;
-				}
-				else if (balance >= charge) {
-					balance = balance - charge;
-					System.out.println("Thank you, your transaction has been successful!");
-					System.out.println();
-					System.out.printf("Your receipt number is: " + transactionID + ", (" + dateFormat.format(transactionDate));
-					System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance, ".");
-					transactionList.add(new Transaction(transactionID, transactionDate, targetID, pass, charge, balance));
-					transactionID++;
-					System.out.println();
-					return;
-				}
-			}
-			else if (confirmation.contentEquals("N")) {
-				System.out.println("No pass bought, returning to travel pass selections . . .");
+			else if (balance >= charge) {
+				balance = balance - charge;
+				System.out.println("Thank you, your transaction has been successful!");
+				System.out.println();
+				System.out.printf("Your receipt number is: " + transactionID + ", (" + dateFormat.format(transactionDate));
+				System.out.printf("). Credit balance remaining on Pep-Pep Ticket is $%.2f", balance, ".");
+				transactionList.add(new Transaction(transactionID, transactionDate, targetID, pass, charge, balance));
+				transactionID++;
+				System.out.println();
 				return;
 			}
 		}
+		else if (confirmation.contentEquals("N")) {
+			System.out.println("No pass bought, returning to travel pass selections . . .");
+			return;
+		}
 	}
+	
 	
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -654,6 +645,18 @@ public class TicketArrayList {
 		}
 		while (!outputSelection.equals("X"));	
 		return;
+	}
+	
+//-------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	// Method for adding tickets into the ticketList array list
+	private void addTickets(long ticketID[], double balance[]) {
+		// Local ticket array list taking data type from the class
+		ArrayList<Ticket> ticketList = new ArrayList<>();
+		for (int i = 0; i < ticketCount; i++) {
+			// Create an object and send values to the constructor to be save in the ticket class
+			ticketList.add(new Ticket(ticketID[i], balance[i]));
+		}
 	}
 	
 //-------------------------------------------------------------------------------------------------------------------------------------------------
